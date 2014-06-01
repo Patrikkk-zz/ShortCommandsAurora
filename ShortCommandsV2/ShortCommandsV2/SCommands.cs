@@ -327,7 +327,7 @@ namespace ShortCommandsV2
             if (players.Count == 0)
             {
                 args.Player.SendInfoMessage("You hugged your invisible friend {0}!", plStr);
-                TSPlayer.All.SendSuccessMessage("{0} stabbed " + (args.Player.TPlayer.male ? "his" : "her") + " invisible friend {1}!", args.Player.Name, plStr);
+                TSPlayer.All.SendSuccessMessage("{0} hugged " + (args.Player.TPlayer.male ? "his" : "her") + " invisible friend {1}!", args.Player.Name, plStr);
             }
             else if (players.Count > 1)
             {
