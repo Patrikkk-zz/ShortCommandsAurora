@@ -1,0 +1,12 @@
+c:\users\clay\documents\visual studio 2012\Projects\ShortCommandsV2\ShortCommandsV2\bin\Debug\ShortCommandsV2.dll
+c:\users\clay\documents\visual studio 2012\Projects\ShortCommandsV2\ShortCommandsV2\bin\Debug\ShortCommandsV2.pdb
+c:\users\clay\documents\visual studio 2012\Projects\ShortCommandsV2\ShortCommandsV2\bin\Debug\Mono.Data.Sqlite.dll
+c:\users\clay\documents\visual studio 2012\Projects\ShortCommandsV2\ShortCommandsV2\bin\Debug\MySql.Data.dll
+c:\users\clay\documents\visual studio 2012\Projects\ShortCommandsV2\ShortCommandsV2\bin\Debug\MySql.Web.dll
+c:\users\clay\documents\visual studio 2012\Projects\ShortCommandsV2\ShortCommandsV2\bin\Debug\Newtonsoft.Json.dll
+c:\users\clay\documents\visual studio 2012\Projects\ShortCommandsV2\ShortCommandsV2\bin\Debug\TerrariaServer.exe
+c:\users\clay\documents\visual studio 2012\Projects\ShortCommandsV2\ShortCommandsV2\bin\Debug\TShockAPI.dll
+c:\users\clay\documents\visual studio 2012\Projects\ShortCommandsV2\ShortCommandsV2\bin\Debug\HttpServer.dll
+c:\users\clay\documents\visual studio 2012\Projects\ShortCommandsV2\ShortCommandsV2\obj\Debug\ShortCommandsV2.dll
+c:\users\clay\documents\visual studio 2012\Projects\ShortCommandsV2\ShortCommandsV2\obj\Debug\ShortCommandsV2.pdb
+C:\Users\Clay\Documents\Visual Studio 2012\Projects\ShortCommandsV2\ShortCommandsV2\obj\Debug\ShortCommandsV2.csprojResolveAssemblyReference.cache
