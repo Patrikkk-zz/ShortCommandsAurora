@@ -326,7 +326,7 @@ namespace ShortCommandsV2
             var players = TShock.Utils.FindPlayer(plStr);
             if (players.Count == 0)
             {
-                args.Player.SendInfoMessage("You stabbed your invisible friend {0}! (Player not found.)", plStr);
+                args.Player.SendInfoMessage("You hugged your invisible friend {0}!", plStr);
                 TSPlayer.All.SendSuccessMessage("{0} stabbed " + (args.Player.TPlayer.male ? "his" : "her") + " invisible friend {1}!", args.Player.Name, plStr);
             }
             else if (players.Count > 1)
@@ -359,7 +359,7 @@ namespace ShortCommandsV2
             var players = TShock.Utils.FindPlayer(plStr);
             if (players.Count == 0)
             {
-                args.Player.SendInfoMessage("You stabbed your invisible friend {0}! (Player not found.)", plStr);
+                args.Player.SendInfoMessage("You stabbed your invisible friend {0}!", plStr);
                 TSPlayer.All.SendSuccessMessage("{0} stabbed " + (args.Player.TPlayer.male ? "his" : "her") + " invisible friend {1}!", args.Player.Name, plStr);
             }
             else if (players.Count > 1)
