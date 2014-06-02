@@ -16,7 +16,7 @@ namespace ShortCommandsV2
         public override string Name { get { return "ShortCommands"; } }
         public override string Author { get { return "Zaicon"; } }
         public override string Description { get { return "A hardcoded version of ShortCommands, along with a few extra commands."; } }
-        public override Version Version { get { return new Version("4.2"); } }
+        public override Version Version { get { return new Version("4.5"); } }
         
         public SCommands(Main game)
 			: base(game)
@@ -72,6 +72,8 @@ namespace ShortCommandsV2
             Commands.ChatCommands.Add(new Command("tshock.world.paint", SCFWall, "facewall") { HelpText = "You run into a wall at high speeds!" });
             Commands.ChatCommands.Add(new Command("worldedit.selection.all", SCSlapAll, "slapall") { HelpText = "Slaps ALL the people!" });
             Commands.ChatCommands.Add(new Command("tshock.admin.kick", SCUser, "upgrade") { HelpText = "Adds user to User+ group." });
+            Commands.ChatCommands.Add(new Command("worldedit.selection.all", SCBuilder1, "b1") { HelpText = "Adds user to Builder 1 group." });
+            Commands.ChatCommands.Add(new Command("worldedit.selection.all", SCBuilder1, "b2") { HelpText = "Adds user to Builder 2 group." });
             Commands.ChatCommands.Add(new Command(SCWebsite, "website") { HelpText = "The website for Aurora Terraria." });
             Commands.ChatCommands.Add(new Command("tshock.world.modify", SCInfo, "user+") { HelpText = "Information on how to get user+." });
         }
@@ -432,7 +434,56 @@ namespace ShortCommandsV2
                 else
                 {
                     TShock.Users.SetUserGroup(TShock.Users.GetUserByName(player[0].Name), "user+");
-                    args.Player.SendSuccessMessage("Successfully upgraded {0} to group User+!", TShock.Users.GetUserByName(player[0].Name));
+                    args.Player.SendSuccessMessage("Successfully upgraded {0} to group User+!", player[0].Name);
+                }
+            }
+        }
+
+        private void SCBuilder1(CommandArgs args)
+        {
+            if (args.Parameters.Count < 1)
+            {
+                args.Player.SendErrorMessage("Invalid syntax: /b1 <account>");
+                return;
+            }
+
+            var str = string.Join(" ", args.Parameters);
+            var player = TShock.Utils.FindPlayer(args.Parameters[0]);
+
+            if (player.Count > 1)
+                TShock.Utils.SendMultipleMatchError(args.Player, player.Select(p => p.Name));
+            else if (player.Count < 1)
+                args.Player.SendErrorMessage("Invalid player!");
+            else
+            {
+                TShock.Users.SetUserGroup(TShock.Users.GetUserByName(player[0].Name), "builder1");
+                args.Player.SendSuccessMessage("Successfully upgraded {0} to group builder1!", player[0].Name);
+            }
+        }
+
+        private void SCBuilder2(CommandArgs args)
+        {
+            if (args.Parameters.Count < 1)
+            {
+                args.Player.SendErrorMessage("Invalid syntax: /b1 <account>");
+                return;
+            }
+
+            var str = string.Join(" ", args.Parameters);
+            var player = TShock.Utils.FindPlayer(args.Parameters[0]);
+
+            if (player.Count > 1)
+                TShock.Utils.SendMultipleMatchError(args.Player, player.Select(p => p.Name));
+            else if (player.Count < 1)
+                args.Player.SendErrorMessage("Invalid player!");
+            else
+            {
+                if (player[0].Group != TShock.Utils.GetGroup("builder1"))
+                    args.Player.SendErrorMessage("You can only promote Builder1 accounts!");
+                else
+                {
+                    TShock.Users.SetUserGroup(TShock.Users.GetUserByName(player[0].Name), "builder2");
+                    args.Player.SendSuccessMessage("Successfully upgraded {0} to group builder2!", player[0].Name);
                 }
             }
         }
