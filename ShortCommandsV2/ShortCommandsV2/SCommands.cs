@@ -16,7 +16,7 @@ namespace ShortCommandsV2
         public override string Name { get { return "ShortCommands"; } }
         public override string Author { get { return "Zaicon"; } }
         public override string Description { get { return "A hardcoded version of ShortCommands, along with a few extra commands."; } }
-        public override Version Version { get { return new Version("4.5"); } }
+        public override Version Version { get { return new Version("4.6"); } }
         
         public SCommands(Main game)
 			: base(game)
@@ -53,6 +53,7 @@ namespace ShortCommandsV2
             Commands.ChatCommands.Add(new Command("aio.checkbuilding", SCCBuilding, "cb") { AllowServer = false, HelpText = "ShortCommand for /checkbuilding" });
             Commands.ChatCommands.Add(new Command("tshockirc.manage", SCIRC, "irc") { HelpText = "ShortCommand for /ircrestart" });
             Commands.ChatCommands.Add(new Command("sendcolor", SCSColor, "sc") { HelpText = "ShortCommand for /sendcolor <color> <text>" });
+            Commands.ChatCommands.Add(new Command("history.get", SCClear, "ci") { HelpText = "ShortCommand for /clear item 30000" });
             Commands.ChatCommands.Add(new Command("worldedit.selection.point", SCPoint1, "p1") { AllowServer = false, HelpText = "ShortCommand for //point 1" });
             Commands.ChatCommands.Add(new Command("worldedit.selection.point", SCPoint2, "p2") { AllowServer = false, HelpText = "ShortCommand for //point 2" });
             Commands.ChatCommands.Add(new Command(SCList, "shortcommands") { AllowServer = false, HelpText = "Lists all ShortCommands available to you." });
@@ -71,6 +72,7 @@ namespace ShortCommandsV2
             Commands.ChatCommands.Add(new Command("tshock.world.paint", SCFPlant, "faceplant") { HelpText = "Slams your face on a plant. Err... makes you faceplant." });
             Commands.ChatCommands.Add(new Command("tshock.world.paint", SCFWall, "facewall") { HelpText = "You run into a wall at high speeds!" });
             Commands.ChatCommands.Add(new Command("worldedit.selection.all", SCSlapAll, "slapall") { HelpText = "Slaps ALL the people!" });
+            Commands.ChatCommands.Add(new Command("history.get", SCRape, "rape") { HelpText = "Rapes the given player." });
             Commands.ChatCommands.Add(new Command("tshock.admin.kick", SCUser, "upgrade") { HelpText = "Adds user to User+ group." });
             Commands.ChatCommands.Add(new Command("worldedit.selection.all", SCBuilder1, "b1") { HelpText = "Adds user to Builder 1 group." });
             Commands.ChatCommands.Add(new Command("worldedit.selection.all", SCBuilder1, "b2") { HelpText = "Adds user to Builder 2 group." });
@@ -196,6 +198,11 @@ namespace ShortCommandsV2
             Commands.HandleCommand(args.Player, "//point 2");
         }
 
+        private void SCClear(CommandArgs args)
+        {
+            Commands.HandleCommand(args.Player, "/clear item 30000");
+        }
+
         private void SCList(CommandArgs args)
         {
             args.Player.SendInfoMessage("List of available ShortCommands:");
@@ -210,7 +217,10 @@ namespace ShortCommandsV2
                 args.Player.SendInfoMessage("/ri: /region info <name>");
             }
             if (args.Player.Group.HasPermission("history.get"))
+            {
                 args.Player.SendInfoMessage("/h: /history");
+                args.Player.SendInfoMessage("/ci: /clear item 30000");
+            }
             if (args.Player.Group.HasPermission("history.rollback"))
                 args.Player.SendInfoMessage("/rb: /rollback <name> ");
             if (args.Player.Group.HasPermission("aio.checkgrief"))
@@ -410,6 +420,41 @@ namespace ShortCommandsV2
                 args.Player.SendInfoMessage("You slapped everyone! That stings!");
             TSPlayer.All.SendInfoMessage("{0} slapped you (along with everyone else)!", args.Player.Name);
             TSPlayer.All.DamagePlayer(15);
+        }
+
+        private void SCRape(CommandArgs args)
+        {
+            if (args.Parameters.Count != 1)
+                args.Player.SendErrorMessage("Invalid syntax: /rape <player>");
+            else
+            {
+                string plStr = args.Parameters[0];
+                var players = TShock.Utils.FindPlayer(plStr);
+                if (players.Count == 0)
+                {
+                    args.Player.SendErrorMessage("Player not found.");
+                }
+                else if (players.Count > 1)
+                {
+                    TShock.Utils.SendMultipleMatchError(args.Player, players.Select(p => p.Name));
+                }
+                else if (players[0].Group == TShock.Utils.GetGroup("admin") || players[0].Group != TShock.Utils.GetGroup("superadmin") || players[0].Group != TShock.Utils.GetGroup("moderator") || players[0].Group != TShock.Utils.GetGroup("L"))
+                {
+                    args.Player.SendErrorMessage("{0} used Rape! {1} avoided the attack!", args.Player.Name, players[0].Name);
+                }
+                else
+                {
+                    args.Player.SendSuccessMessage("You raped {0}. You feel slightly better.", players[0].Name);
+                    players[0].SendInfoMessage("You were raped by {0}.", args.Player.Name);
+                    players[0].SetBuff(26, 7200); //Well Fed; 2 minutes
+                    players[0].SetBuff(30, 21600); //Bleeding; 6 minutes
+                    players[0].SetBuff(33, 7200); //Weak
+                    players[0].SetBuff(46, 7200); //Chilled
+                    players[0].SetBuff(63); // Panic!
+                    players[0].SetBuff(103, 7200); //Wet
+                    players[0].SetBuff(120, 7200); //Stinky
+                }
+            }
         }
 
         private void SCUser(CommandArgs args)
