@@ -57,20 +57,23 @@ namespace ShortCommandsV2
             Commands.ChatCommands.Add(new Command("worldedit.selection.point", SCPoint1, "p1") { AllowServer = false, HelpText = "ShortCommand for //point 1" });
             Commands.ChatCommands.Add(new Command("worldedit.selection.point", SCPoint2, "p2") { AllowServer = false, HelpText = "ShortCommand for //point 2" });
             Commands.ChatCommands.Add(new Command(SCList, "shortcommands") { AllowServer = false, HelpText = "Lists all ShortCommands available to you." });
-            Commands.ChatCommands.Add(new Command("tshock.world.modify", SCBunny, "bunny") { AllowServer = false, HelpText = "Spawns a Bunny pet!" });
-            Commands.ChatCommands.Add(new Command("tshock.world.modify", SCPenguin, "peng", "penguin") { AllowServer = false, HelpText = "Spawns a Penguin pet!" });
-            Commands.ChatCommands.Add(new Command("tshock.world.modify", SCTruffle, "truffle") { AllowServer = false, HelpText = "Spawns a baby Truffle pet!" });
-            Commands.ChatCommands.Add(new Command("tshock.world.modify", SCWisp, "wisp") { AllowServer = false, HelpText = "Spawns a Wisp!" });
-            Commands.ChatCommands.Add(new Command("tshock.world.modify", SCRudolph, "rudolph") { AllowServer = false, HelpText = "Spawns a Rudolph mount!" });
-            Commands.ChatCommands.Add(new Command("tshock.world.modify", SCBunnyMount, "bunnymount") { AllowServer = false, HelpText = "Spawns a Bunny mount!" });
-            Commands.ChatCommands.Add(new Command("tshock.world.modify", SCSlimeMount, "slimemount") { AllowServer = false, HelpText = "Spawns a Slime mount!" });
-            Commands.ChatCommands.Add(new Command("tshock.world.modify", SCBeeMount, "beemount") { AllowServer = false, HelpText = "Spawns a Hornet mount!" });
-            Commands.ChatCommands.Add(new Command("tshock.world.paint", SCPoke, "poke") { HelpText = "Pokes a player!" });
-            Commands.ChatCommands.Add(new Command("tshock.admin.kick", SCStab, "stab") { HelpText = "Stabs a player!" });
-            Commands.ChatCommands.Add(new Command("tshock.world.modify", SCHug, "hug") { HelpText = "Hugs a player!" });
-            Commands.ChatCommands.Add(new Command("tshock.world.paint", SCFDesk, "facedesk") { HelpText = "Slams your face on a desk." });
-            Commands.ChatCommands.Add(new Command("tshock.world.paint", SCFPlant, "faceplant") { HelpText = "Slams your face on a plant. Err... makes you faceplant." });
-            Commands.ChatCommands.Add(new Command("tshock.world.paint", SCFWall, "facewall") { HelpText = "You run into a wall at high speeds!" });
+            Commands.ChatCommands.Add(new Command("sc.pets", SCBunny, "bunny") { AllowServer = false, HelpText = "Spawns a Bunny pet!" });
+            Commands.ChatCommands.Add(new Command("sc.pets", SCPenguin, "peng", "penguin") { AllowServer = false, HelpText = "Spawns a Penguin pet!" });
+            Commands.ChatCommands.Add(new Command("sc.pets", SCTruffle, "truffle") { AllowServer = false, HelpText = "Spawns a baby Truffle pet!" });
+            Commands.ChatCommands.Add(new Command("sc.pets", SCWisp, "wisp") { AllowServer = false, HelpText = "Spawns a Wisp!" });
+            Commands.ChatCommands.Add(new Command("sc.pets", SCRudolph, "rudolph") { AllowServer = false, HelpText = "Spawns a Rudolph mount!" });
+            Commands.ChatCommands.Add(new Command("sc.pets", SCBunnyMount, "bunnymount") { AllowServer = false, HelpText = "Spawns a Bunny mount!" });
+            Commands.ChatCommands.Add(new Command("sc.pets", SCSlimeMount, "slimemount") { AllowServer = false, HelpText = "Spawns a Slime mount!" });
+            Commands.ChatCommands.Add(new Command("sc.pets", SCBeeMount, "beemount") { AllowServer = false, HelpText = "Spawns a Hornet mount!" });
+            Commands.ChatCommands.Add(new Command("sc.poke", SCPoke, "poke") { HelpText = "Pokes a player!" });
+            Commands.ChatCommands.Add(new Command("sc.supoke", SCSuPoke, "supoke") { HelpText = "Super pokes a player." });
+            Commands.ChatCommands.Add(new Command("sc.stab", SCStab, "stab") { HelpText = "Stabs a player!" });
+            Commands.ChatCommands.Add(new Command("sc.hug", SCHug, "hug") { HelpText = "Hugs a player!" });
+            Commands.ChatCommands.Add(new Command("sc.face", SCFPalm, "facepalm") { HelpText = "Performs a facepalm." });
+            Commands.ChatCommands.Add(new Command("sc.face", SCFDesk, "facedesk") { HelpText = "Slams your face on a desk." });
+            Commands.ChatCommands.Add(new Command("sc.face", SCFPlant, "faceplant") { HelpText = "Slams your face on a plant. Err... makes you faceplant." });
+            Commands.ChatCommands.Add(new Command("sc.face", SCFWall, "facewall") { HelpText = "You run into a wall at high speeds!" });
+            Commands.ChatCommands.Add(new Command("sc.face", SCFBook, "facebook") { HelpText = "Checks your friends' status messages." });
             Commands.ChatCommands.Add(new Command("worldedit.selection.all", SCSlapAll, "slapall") { HelpText = "Slaps ALL the people!" });
             Commands.ChatCommands.Add(new Command("history.get", SCRape, "rape") { HelpText = "Rapes the given player." });
             Commands.ChatCommands.Add(new Command("tshock.admin.kick", SCUser, "upgrade") { HelpText = "Adds user to User+ group." });
@@ -321,6 +324,39 @@ namespace ShortCommandsV2
             }
         }
 
+        private void SCSuPoke(CommandArgs args)
+        {
+            if (args.Parameters.Count != 1)
+            {
+                args.Player.SendErrorMessage("Invalid syntax! Proper syntax: /supoke <player>");
+                return;
+            }
+            if (args.Parameters[0].Length == 0)
+            {
+                args.Player.SendErrorMessage("Invalid player!");
+                return;
+            }
+
+            string plStr = args.Parameters[0];
+            var players = TShock.Utils.FindPlayer(plStr);
+            if (players.Count == 0)
+            {
+                args.Player.SendErrorMessage("Invalid player!");
+            }
+            else if (players.Count > 1)
+            {
+                TShock.Utils.SendMultipleMatchError(args.Player, players.Select(p => p.Name));
+            }
+            else
+            {
+                var plr = players[0];
+                plr.DamagePlayer(30000);
+                args.Player.SendInfoMessage("You poked {0}. BOOM!", plr.Name);
+                TSPlayer.All.SendSuccessMessage("{0} poked {1}. BOOM!", args.Player.Name, plr.Name);
+                Log.Info("{0} super-poked {1}.", args.Player.Name, plr.Name);
+            }
+        }
+
         private void SCHug(CommandArgs args)
         {
             if (args.Parameters.Count != 1)
@@ -352,6 +388,21 @@ namespace ShortCommandsV2
                 TSPlayer.All.SendSuccessMessage("{0} hugged {1}!", args.Player.Name, plr.Name);
                 Log.Info("{0} hugged {1}!", args.Player.Name, plr.Name);
             }
+        }
+
+        private void SCFPalm(CommandArgs args)
+        {
+            
+                args.Player.SendInfoMessage("You facepalmed.");
+                TSPlayer.All.SendSuccessMessage("{0} facepalmed.", args.Player.Name);
+                Log.Info("{0} facepalmed.", args.Player.Name);
+            
+        }
+
+        private void SCFBook(CommandArgs args)
+        {
+            args.Player.SendInfoMessage("You hit your face with the nearest, heaviest book.");
+            TSPlayer.All.SendSuccessMessage("{0} hit " + (args.Player.TPlayer.male ? "his" : "her") + " face with the nearest, heaviest book.", args.Player.Name);
         }
 
         private void SCStab(CommandArgs args)
@@ -438,7 +489,7 @@ namespace ShortCommandsV2
                 {
                     TShock.Utils.SendMultipleMatchError(args.Player, players.Select(p => p.Name));
                 }
-                else if (players[0].Group == TShock.Utils.GetGroup("admin") || players[0].Group != TShock.Utils.GetGroup("superadmin") || players[0].Group != TShock.Utils.GetGroup("moderator") || players[0].Group != TShock.Utils.GetGroup("L"))
+                else if (players[0].Group == TShock.Utils.GetGroup("admin") || players[0].Group == TShock.Utils.GetGroup("superadmin") || players[0].Group == TShock.Utils.GetGroup("moderator") || players[0].Group == TShock.Utils.GetGroup("L"))
                 {
                     args.Player.SendErrorMessage("{0} used Rape! {1} avoided the attack!", args.Player.Name, players[0].Name);
                 }
