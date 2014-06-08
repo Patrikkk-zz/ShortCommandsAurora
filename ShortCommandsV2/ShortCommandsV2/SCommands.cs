@@ -74,11 +74,11 @@ namespace ShortCommandsV2
             Commands.ChatCommands.Add(new Command("sc.face", SCFPlant, "faceplant") { HelpText = "Slams your face on a plant. Err... makes you faceplant." });
             Commands.ChatCommands.Add(new Command("sc.face", SCFWall, "facewall") { HelpText = "You run into a wall at high speeds!" });
             Commands.ChatCommands.Add(new Command("sc.face", SCFBook, "facebook") { HelpText = "Checks your friends' status messages." });
-            Commands.ChatCommands.Add(new Command("worldedit.selection.all", SCSlapAll, "slapall") { HelpText = "Slaps ALL the people!" });
-            Commands.ChatCommands.Add(new Command("history.get", SCRape, "rape") { HelpText = "Rapes the given player." });
-            Commands.ChatCommands.Add(new Command("tshock.admin.kick", SCUser, "upgrade") { HelpText = "Adds user to User+ group." });
-            Commands.ChatCommands.Add(new Command("worldedit.selection.all", SCBuilder1, "b1") { HelpText = "Adds user to Builder 1 group." });
-            Commands.ChatCommands.Add(new Command("worldedit.selection.all", SCBuilder1, "b2") { HelpText = "Adds user to Builder 2 group." });
+            Commands.ChatCommands.Add(new Command("sc.slapall", SCSlapAll, "slapall") { HelpText = "Slaps ALL the people!" });
+            Commands.ChatCommands.Add(new Command("sc.rape", SCRape, "rape") { HelpText = "Rapes the given player." });
+            Commands.ChatCommands.Add(new Command("sc.ranks", SCUser, "upgrade") { HelpText = "Adds user to User+ group." });
+            Commands.ChatCommands.Add(new Command("sc.ranks", SCBuilder1, "b1") { HelpText = "Adds user to Builder 1 group." });
+            Commands.ChatCommands.Add(new Command("sc.ranks", SCBuilder1, "b2") { HelpText = "Adds user to Builder 2 group." });
             Commands.ChatCommands.Add(new Command(SCWebsite, "website") { HelpText = "The website for Aurora Terraria." });
             Commands.ChatCommands.Add(new Command("tshock.world.modify", SCInfo, "user+") { HelpText = "Information on how to get user+." });
         }
