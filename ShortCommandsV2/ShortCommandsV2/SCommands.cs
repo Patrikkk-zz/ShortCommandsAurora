@@ -433,7 +433,7 @@ namespace ShortCommandsV2
             {
                 var plr = players[0];
                 plr.DamagePlayer(9001);
-                args.Player.SendInfoMessage("You stabbed {0} for OVER 9000 damge!", plr.Name);
+                args.Player.SendInfoMessage("You stabbed {0} for OVER 9000 damage!", plr.Name);
                 TSPlayer.All.SendSuccessMessage("{0} stabbed {1} mercilessly!", args.Player.Name, plr.Name);
                 Log.Info("{0} stabbed {1}.", args.Player.Name, plr.Name);
             }
