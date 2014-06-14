@@ -17,6 +17,7 @@ namespace ShortCommandsV2
         public override string Author { get { return "Zaicon"; } }
         public override string Description { get { return "A hardcoded version of ShortCommands, along with a few extra commands."; } }
         public override Version Version { get { return new Version("5.0"); } }
+        public static Color acolor;
         
         public SCommands(Main game)
 			: base(game)
@@ -633,10 +634,10 @@ namespace ShortCommandsV2
 
         private void SCInfo(CommandArgs args)
         {
-            args.Player.SendInfoMessage("To get [User+], go to http://www.aurora-terraria.org/forum/ and make an Introduction thread.");
-            args.Player.SendInfoMessage("To get [Grief Watch], you will need to be active on this server and help out when possible.");
-            args.Player.SendInfoMessage("To get [Builder][1], build at least 3 buildings, then go to http://www.aurora-terraria.org/forum/ and make a Builder application.");
-            args.Player.SendInfoMessage("To get [Donator][1], you need to donate money to the server at http://www.aurora-terraria.org/donate/.");
+            args.Player.SendMessage("To get [User+], go to http://www.aurora-terraria.org/forum/ and make an Introduction thread.", 153, 153, 255);
+            args.Player.SendMessage("To get [Grief Watch], you will need to be active on this server and help out when possible.", 239, 146, 180);
+            args.Player.SendMessage("To get [Builder][1], build at least 3 buildings, then go to http://www.aurora-terraria.org/forum/ and make a Builder application.", 055, 235, 139);
+            args.Player.SendMessage("To get [Donator][1], you need to donate money to the server at http://www.aurora-terraria.org/donate/.", 193, 107, 250);
         }
     }
 }
