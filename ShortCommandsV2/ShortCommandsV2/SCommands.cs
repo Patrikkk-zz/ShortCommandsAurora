@@ -104,12 +104,6 @@ namespace ShortCommandsV2
             }
             else if (args.Parameters[0] == "start" && !args.Player.IsLoggedIn)
             {
-                DateTime start = DateTime.Now;
-                DateTime check = DateTime.Now;
-                while (check.Second < (start.Second + 5))
-                {
-                    check = DateTime.Now;
-                }
                 if (TShock.Users.GetUserByName(args.Player.Name) == null)
                     args.Player.SendMessage("This character name is available! Please type /register <password> in order to claim this account as yours and give yourself the ability to build and use extra commands!", Color.LawnGreen);
                 else
