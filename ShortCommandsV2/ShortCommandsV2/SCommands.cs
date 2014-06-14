@@ -93,19 +93,29 @@ namespace ShortCommandsV2
 
         public void OnGreet(GreetPlayerEventArgs args)
         {
-            Commands.HandleCommand(TShock.Players[args.Who], "/check");
+            Commands.HandleCommand(TShock.Players[args.Who], "/check start");
         }
 
         private void SCCheck(CommandArgs args)
         {
-            if (!args.Player.IsLoggedIn)
+            if (args.Parameters.Count == 0)
             {
+                args.Player.SendErrorMessage("Invalid syntax: /check <player name>");
+            }
+            else if (args.Parameters[0] == "start" && !args.Player.IsLoggedIn)
+            {
+                DateTime start = DateTime.Now;
+                DateTime check = DateTime.Now;
+                while (check.Second < (start.Second + 5))
+                {
+                    check = DateTime.Now;
+                }
                 if (TShock.Users.GetUserByName(args.Player.Name) == null)
                     args.Player.SendMessage("This character name is available! Please type /register <password> in order to claim this account as yours and give yourself the ability to build and use extra commands!", Color.LawnGreen);
                 else
                     args.Player.SendMessage("This character name is already registered. If this is your account, please /login <password>. If you did not register this account, please make a new character with a new name and try again.", Color.LawnGreen);
             }
-            else if (args.Parameters.Count != 0 && args.Player.Group.HasPermission("sc.check"))
+            else if (args.Parameters.Count != 0 && args.Player.Group.HasPermission("sc.check") && args.Parameters[0] != "start")
             {
                 string plr = "";
                 int count = 0;
