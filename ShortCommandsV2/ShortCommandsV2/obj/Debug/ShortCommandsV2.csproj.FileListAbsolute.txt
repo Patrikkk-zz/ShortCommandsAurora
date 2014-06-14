@@ -21,3 +21,4 @@ C:\Users\Clay\Documents\GitHub\ShortCommandsAurora\ShortCommandsV2\ShortCommands
 C:\Users\Clay\Documents\GitHub\ShortCommandsAurora\ShortCommandsV2\ShortCommandsV2\bin\Debug\HttpServer.dll
 C:\Users\Clay\Documents\GitHub\ShortCommandsAurora\ShortCommandsV2\ShortCommandsV2\obj\Debug\ShortCommandsV2.dll
 C:\Users\Clay\Documents\GitHub\ShortCommandsAurora\ShortCommandsV2\ShortCommandsV2\obj\Debug\ShortCommandsV2.pdb
+C:\Users\Clay\Documents\GitHub\ShortCommandsAurora\ShortCommandsV2\ShortCommandsV2\obj\Debug\ShortCommandsV2.csprojResolveAssemblyReference.cache

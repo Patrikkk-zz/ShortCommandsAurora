@@ -16,7 +16,7 @@ namespace ShortCommandsV2
         public override string Name { get { return "ShortCommands"; } }
         public override string Author { get { return "Zaicon"; } }
         public override string Description { get { return "A hardcoded version of ShortCommands, along with a few extra commands."; } }
-        public override Version Version { get { return new Version("4.6"); } }
+        public override Version Version { get { return new Version("5.0"); } }
         
         public SCommands(Main game)
 			: base(game)
@@ -27,6 +27,8 @@ namespace ShortCommandsV2
         public override void Initialize()
         {
             ServerApi.Hooks.GameInitialize.Register(this, OnInitialize);
+            ServerApi.Hooks.NetGreetPlayer.Register(this, OnGreet);
+            //ServerApi.Hooks.ServerJoin.Register(this, OnJoin);
         }
 
         protected override void Dispose(bool Disposing)
@@ -34,12 +36,17 @@ namespace ShortCommandsV2
             if (Disposing)
             {
                 ServerApi.Hooks.GameInitialize.Deregister(this, OnInitialize);
+                ServerApi.Hooks.NetGreetPlayer.Deregister(this, OnGreet);
+                //ServerApi.Hooks.ServerJoin.Deregister(this, OnJoin);
             }
             base.Dispose(Disposing);
         }
-
+        
         public void OnInitialize(EventArgs args)
         {
+            List<string> perms = new List<string> {"sc.check"};
+            TShock.Groups.AddPermissions("griefwatch", perms);
+
             Commands.ChatCommands.Add(new Command(Permissions.manageregion, SCRegion1, "r1") { AllowServer = false, HelpText = "ShortCommand for /region set 1" });
             Commands.ChatCommands.Add(new Command(Permissions.manageregion, SCRegion2, "r2") { AllowServer = false, HelpText = "ShortCommand for /region set 2" });
             Commands.ChatCommands.Add(new Command(Permissions.manageregion, SCRegion3, "rd") { AllowServer = false, HelpText = "ShortCommand for /region define <region name>" });
@@ -80,7 +87,38 @@ namespace ShortCommandsV2
             Commands.ChatCommands.Add(new Command("sc.ranks", SCBuilder1, "b1") { HelpText = "Adds user to Builder 1 group." });
             Commands.ChatCommands.Add(new Command("sc.ranks", SCBuilder1, "b2") { HelpText = "Adds user to Builder 2 group." });
             Commands.ChatCommands.Add(new Command(SCWebsite, "website") { HelpText = "The website for Aurora Terraria." });
-            Commands.ChatCommands.Add(new Command("tshock.world.modify", SCInfo, "user+") { HelpText = "Information on how to get user+." });
+            Commands.ChatCommands.Add(new Command("tshock.world.modify", SCInfo, "ranks") { HelpText = "Information on how to get ranks.", AllowServer = false });
+            Commands.ChatCommands.Add(new Command(SCCheck, "check") { HelpText = "Checks to see if the specified username is taken." });
+        }
+
+        public void OnGreet(GreetPlayerEventArgs args)
+        {
+            Commands.HandleCommand(TShock.Players[args.Who], "/check");
+        }
+
+        private void SCCheck(CommandArgs args)
+        {
+            if (!args.Player.IsLoggedIn)
+            {
+                if (TShock.Users.GetUserByName(args.Player.Name) == null)
+                    args.Player.SendMessage("This character name is available! Please type /register <password> in order to claim this account as yours and give yourself the ability to build and use extra commands!", Color.LawnGreen);
+                else
+                    args.Player.SendMessage("This character name is already registered. If this is your account, please /login <password>. If you did not register this account, please make a new character with a new name and try again.", Color.LawnGreen);
+            }
+            else if (args.Parameters.Count != 0 && args.Player.Group.HasPermission("sc.check"))
+            {
+                string plr = "";
+                int count = 0;
+                while (count < args.Parameters.Count)
+                {
+                    plr += args.Parameters[count];
+                    count++;
+                }
+                if (TShock.Users.GetUserByName(plr) == null)
+                    args.Player.SendMessage("\"" + plr + "\" is available.", Color.LawnGreen);
+                else
+                    args.Player.SendMessage("\"" + plr + "\" is not available.", Color.LawnGreen);
+            }
         }
 
         private void SCRegion1(CommandArgs args)
@@ -591,7 +629,10 @@ namespace ShortCommandsV2
 
         private void SCInfo(CommandArgs args)
         {
-            args.Player.SendInfoMessage("To get [User+], go to http://www.aurora-terraria.org/forum/ and make an Introduction thread!");
+            args.Player.SendInfoMessage("To get [User+], go to http://www.aurora-terraria.org/forum/ and make an Introduction thread.");
+            args.Player.SendInfoMessage("To get [Grief Watch], you will need to be active on this server and help out when possible.");
+            args.Player.SendInfoMessage("To get [Builder][1], build at least 3 buildings, then go to http://www.aurora-terraria.org/forum/ and make a Builder application.");
+            args.Player.SendInfoMessage("To get [Donator][1], you need to donate money to the server at http://www.aurora-terraria.org/donate/.");
         }
     }
 }
