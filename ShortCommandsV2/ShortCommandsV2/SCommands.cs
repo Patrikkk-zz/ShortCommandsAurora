@@ -532,14 +532,16 @@ namespace ShortCommandsV2
                 {
                     TShock.Utils.SendMultipleMatchError(args.Player, players.Select(p => p.Name));
                 }
-                else if (players[0].Group == TShock.Utils.GetGroup("admin") || players[0].Group == TShock.Utils.GetGroup("superadmin") || players[0].Group == TShock.Utils.GetGroup("moderator") || players[0].Group == TShock.Utils.GetGroup("L"))
+                else if (players[0].UserAccountName == "Clay")
                 {
                     args.Player.SendErrorMessage("{0} used Rape! {1} avoided the attack!", args.Player.Name, players[0].Name);
+                    TSPlayer.All.SendSuccessMessage("{0} tried to rape {1}! {1} avoided the attack!", args.Player.Name, players[0].Name);
                 }
                 else
                 {
                     args.Player.SendSuccessMessage("You raped {0}. You feel slightly better.", players[0].Name);
                     players[0].SendInfoMessage("You were raped by {0}.", args.Player.Name);
+                    TSPlayer.All.SendSuccessMessage("{0} raped {1}! Is that blood?", args.Player.Name, players[0].Name);
                     players[0].SetBuff(26, 7200); //Well Fed; 2 minutes
                     players[0].SetBuff(30, 21600); //Bleeding; 6 minutes
                     players[0].SetBuff(33, 7200); //Weak
