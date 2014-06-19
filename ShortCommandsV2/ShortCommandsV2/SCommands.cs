@@ -64,6 +64,7 @@ namespace ShortCommandsV2
             Commands.ChatCommands.Add(new Command("history.get", SCClear, "ci") { HelpText = "ShortCommand for /clear item 30000" });
             Commands.ChatCommands.Add(new Command("worldedit.selection.point", SCPoint1, "p1") { AllowServer = false, HelpText = "ShortCommand for //point 1" });
             Commands.ChatCommands.Add(new Command("worldedit.selection.point", SCPoint2, "p2") { AllowServer = false, HelpText = "ShortCommand for //point 2" });
+            Commands.ChatCommands.Add(new Command(Permissions.ban, SCBan, "gban") { HelpText = "ShortCommand for /oban add <name> Griefing, appeal at aurora-terraria.org" });
             Commands.ChatCommands.Add(new Command(SCList, "shortcommands") { AllowServer = false, HelpText = "Lists all ShortCommands available to you." });
             Commands.ChatCommands.Add(new Command("sc.pets", SCBunny, "bunny") { AllowServer = false, HelpText = "Spawns a Bunny pet!" });
             Commands.ChatCommands.Add(new Command("sc.pets", SCPenguin, "peng", "penguin") { AllowServer = false, HelpText = "Spawns a Penguin pet!" });
@@ -92,6 +93,7 @@ namespace ShortCommandsV2
             Commands.ChatCommands.Add(new Command(SCCheck, "check") { HelpText = "Checks to see if the specified username is taken." });
         }
 
+        #region Check
         public void OnGreet(GreetPlayerEventArgs args)
         {
             Commands.HandleCommand(TShock.Players[args.Who], "/check start");
@@ -125,7 +127,9 @@ namespace ShortCommandsV2
                     args.Player.SendMessage("\"" + plr + "\" is not available.", Color.LawnGreen);
             }
         }
+        #endregion
 
+        #region Regions
         private void SCRegion1(CommandArgs args)
         {
             Commands.HandleCommand(args.Player, "/region set 1");
@@ -174,6 +178,9 @@ namespace ShortCommandsV2
             else
                 Commands.HandleCommand(args.Player, "/region info " + args.Parameters[0]);
         }
+        #endregion
+
+        #region More Shortcommands
         private void SCGod(CommandArgs args)
         {
             if (args.Parameters.Count == 0)
@@ -181,7 +188,7 @@ namespace ShortCommandsV2
             else if (args.Parameters.Count == 1)
                 Commands.HandleCommand(args.Player, "/godmode " + args.Parameters[0]);
             else if (args.Parameters.Count == 2)
-                Commands.HandleCommand(args.Player, "/godmode " + args.Parameters[1]);
+                Commands.HandleCommand(args.Player, "/godmode " + args.Parameters[0] + " " + args.Parameters[1]);
             else
                 args.Player.SendErrorMessage("Use /godmode for players with more than two words in his/her name.");
         }
@@ -286,6 +293,20 @@ namespace ShortCommandsV2
             }
         }
 
+        private void SCBan(CommandArgs args)
+        {
+            if (args.Parameters.Count == 0)
+                args.Player.SendErrorMessage("Invalid Syntax! /gban <griefer>");
+            else if (args.Parameters.Count == 1)
+            {
+                Commands.HandleCommand(args.Player, "/oban add " + args.Parameters[0] + " Griefing, appeal at aurora-terraria.org/unban/");
+            }
+            else
+                args.Player.SendErrorMessage("Invalid Syntax! /gban \"griefer name\"");
+        }
+        #endregion
+
+        #region Pets
         private void SCBunny(CommandArgs args)
         {
             args.Player.SetBuff(40);
@@ -334,6 +355,9 @@ namespace ShortCommandsV2
             args.Player.SendSuccessMessage("You spawned a Hornet mount! Right-click the hornet mount icon under your toolbar to deactivate.");
         }
 
+        #endregion
+
+        #region UserxUser
         private void SCPoke(CommandArgs args)
         {
             if (args.Parameters.Count != 1)
@@ -553,6 +577,9 @@ namespace ShortCommandsV2
             }
         }
 
+        #endregion
+
+        #region Ranks
         private void SCUser(CommandArgs args)
         {
             if (args.Parameters.Count < 1)
@@ -628,6 +655,8 @@ namespace ShortCommandsV2
                 }
             }
         }
+
+        #endregion
 
         private void SCWebsite(CommandArgs args)
         {
