@@ -84,6 +84,7 @@ namespace ShortCommandsV2
             Commands.ChatCommands.Add(new Command("sc.supoke", SCSuPoke, "supoke") { HelpText = "Super pokes a player." });
             Commands.ChatCommands.Add(new Command("sc.stab", SCStab, "stab") { HelpText = "Stabs a player!" });
             Commands.ChatCommands.Add(new Command("sc.hug", SCHug, "hug") { HelpText = "Hugs a player!" });
+            Commands.ChatCommands.Add(new Command("sc.lick", SCLick, "lick") { HelpText = "Licks a player!" });
             Commands.ChatCommands.Add(new Command("sc.face", SCFPalm, "facepalm") { HelpText = "Performs a facepalm." });
             Commands.ChatCommands.Add(new Command("sc.face", SCFDesk, "facedesk") { HelpText = "Slams your face on a desk." });
             Commands.ChatCommands.Add(new Command("sc.face", SCFPlant, "faceplant") { HelpText = "Slams your face on a plant. Err... makes you faceplant." });
@@ -992,6 +993,39 @@ namespace ShortCommandsV2
                 args.Player.SendInfoMessage("You hugged {0}!", plr.Name);
                 TSPlayer.All.SendSuccessMessage("{0} hugged {1}!", args.Player.Name, plr.Name);
                 Log.Info("{0} hugged {1}!", args.Player.Name, plr.Name);
+            }
+        }
+
+        private void SCLick(CommandArgs args)
+        {
+            if (args.Parameters.Count != 1)
+            {
+                args.Player.SendErrorMessage("Invalid syntax! Proper syntax: /lick <player>");
+                return;
+            }
+            if (args.Parameters[0].Length == 0)
+            {
+                args.Player.SendErrorMessage("Invalid player!");
+                return;
+            }
+
+            string plStr = args.Parameters[0];
+            var players = TShock.Utils.FindPlayer(plStr);
+            if (players.Count == 0)
+            {
+                args.Player.SendInfoMessage("You licked the air! {0} was not found...", plStr);
+                TSPlayer.All.SendSuccessMessage("{0} licked the air!", args.Player.Name);
+            }
+            else if (players.Count > 1)
+            {
+                TShock.Utils.SendMultipleMatchError(args.Player, players.Select(p => p.Name));
+            }
+            else
+            {
+                var plr = players[0];
+                args.Player.SendInfoMessage("You licked {0}!", plr.Name);
+                TSPlayer.All.SendSuccessMessage("{0} licked {1}!", args.Player.Name, plr.Name);
+                Log.Info("{0} licked {1}!", args.Player.Name, plr.Name);
             }
         }
 
