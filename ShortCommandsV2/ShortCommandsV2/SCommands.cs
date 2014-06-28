@@ -1128,10 +1128,20 @@ namespace ShortCommandsV2
                 {
                     TShock.Utils.SendMultipleMatchError(args.Player, players.Select(p => p.Name));
                 }
-                else if (players[0].UserAccountName == "Clay")
+                else if (players[0].UserAccountName == "Patrikk")
                 {
-                    args.Player.SendErrorMessage("{0} used Rape! {1} avoided the attack!", args.Player.Name, players[0].Name);
-                    TSPlayer.All.SendSuccessMessage("{0} tried to rape {1}! {1} avoided the attack!", args.Player.Name, players[0].Name);
+                    args.Player.SendErrorMessage("You cannot rape the master of rapes!", args.Player.Name, players[0].Name);
+                    TSPlayer.All.SendSuccessMessage("{0} tried to rape {1}! {1} laughed and promptly banned {0}.", args.Player.Name, players[0].Name);
+                    try
+                    {
+                        TShock.Bans.AddBan(args.Player.IP, args.Player.Name, args.Player.UUID, "You were banned for trying to rape your master.");
+                        TShock.Bans.RemoveBan(args.Player.Name, true);
+                    }
+                    catch (Exception)
+                    {
+                        TShock.Bans.AddBan(args.Player.IP, args.Player.Name, "You were banned for trying to rape your master.");
+                        TShock.Bans.RemoveBan(args.Player.IP);
+                    }                    
                 }
                 else
                 {
