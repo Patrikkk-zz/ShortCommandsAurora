@@ -69,6 +69,7 @@ namespace ShortCommandsV2
             Commands.ChatCommands.Add(new Command("worldedit.selection.point", SCPoint1, "p1") { AllowServer = false, HelpText = "ShortCommand for //point 1" });
             Commands.ChatCommands.Add(new Command("worldedit.selection.point", SCPoint2, "p2") { AllowServer = false, HelpText = "ShortCommand for //point 2" });
             Commands.ChatCommands.Add(new Command(Permissions.ban, SCBan, "gban") { HelpText = "ShortCommand for /oban add <name> Griefing, appeal at aurora-terraria.org" });
+            Commands.ChatCommands.Add(new Command("sc.tphere", SCTPHere, "tphere") { HelpText = "Teleports players to you.", AllowServer = false });
             Commands.ChatCommands.Add(new Command(SCList, "shortcommands") { AllowServer = false, HelpText = "Lists all ShortCommands available to you." });
             Commands.ChatCommands.Add(new Command("sc.pets", SCBunny, "bunny") { AllowServer = false, HelpText = "Spawns a Bunny pet!" });
             Commands.ChatCommands.Add(new Command("sc.pets", SCPenguin, "peng", "penguin") { AllowServer = false, HelpText = "Spawns a Penguin pet!" });
@@ -92,6 +93,7 @@ namespace ShortCommandsV2
             Commands.ChatCommands.Add(new Command("sc.face", SCFBook, "facebook") { HelpText = "Checks your friends' status messages." });
             Commands.ChatCommands.Add(new Command("sc.slapall", SCSlapAll, "slapall") { HelpText = "Slaps ALL the people!" });
             Commands.ChatCommands.Add(new Command("sc.rape", SCRape, "rape") { HelpText = "Rapes the given player." });
+            Commands.ChatCommands.Add(new Command("sc.scatter", SCScatter, "scatter") { HelpText = "Scatters players." });
             Commands.ChatCommands.Add(new Command("sc.sb", SCSB, "boss") { HelpText = "Spawns bosses.", AllowServer = false });
             Commands.ChatCommands.Add(new Command("sc.sm", SCSM, "mob") { HelpText = "Spawns mobs.", AllowServer = false });
             Commands.ChatCommands.Add(new Command("sc.bn", SCBN, "bn") { HelpText = "Butchers NPCs in a nearby radius.", AllowServer = false });
@@ -361,6 +363,56 @@ namespace ShortCommandsV2
                 args.Player.SendErrorMessage("Invalid Syntax! /gban \"griefer name\"");
         }
         #endregion
+
+        public static void SCTPHere(CommandArgs args)
+        {
+            if (args.Parameters.Count < 1)
+            {
+                if (args.Player.Group.HasPermission(Permissions.tpallothers))
+                    args.Player.SendErrorMessage("Invalid syntax! Proper syntax: /tphere <player|*>");
+                else
+                    args.Player.SendErrorMessage("Invalid syntax! Proper syntax: /tphere <player>");
+                return;
+            }
+
+            string playerName = String.Join(" ", args.Parameters);
+            var players = TShock.Utils.FindPlayer(playerName);
+            if (players.Count == 0)
+            {
+                if (playerName == "*")
+                {
+                    if (!args.Player.Group.HasPermission("sc.tphereall"))
+                    {
+                        args.Player.SendErrorMessage("You do not have permission to use this command.");
+                        return;
+                    }
+                    args.Player.SendInfoMessage(string.Format("You teleported everyone here."));
+                    for (int i = 0; i < Main.maxPlayers; i++)
+                    {
+                        if (Main.player[i].active && (Main.player[i] != args.TPlayer))
+                        {
+                            if (TShock.Players[i].Teleport(args.TPlayer.position.X, args.TPlayer.position.Y))
+                                TShock.Players[i].SendSuccessMessage(String.Format("You were teleported to {0}.", args.Player.Name));
+                        }
+                    }
+                }
+                else
+                    args.Player.SendErrorMessage("Invalid player!");
+            }
+            else if (players.Count > 1)
+            {
+                TShock.Utils.SendMultipleMatchError(args.Player, players.Select(p => p.Name));
+            }
+            else
+            {
+                var plr = players[0];
+                if (plr.Teleport(args.TPlayer.position.X, args.TPlayer.position.Y))
+                {
+                    plr.SendInfoMessage("You were teleported to {0}.", args.Player.Name);
+                    args.Player.SendSuccessMessage("You teleported {0} here.", plr.Name);
+                }
+            }
+        }
 
         #region Pets
         private void SCBunny(CommandArgs args)
@@ -1160,6 +1212,30 @@ namespace ShortCommandsV2
         }
 
         #endregion
+
+        private void SCScatter(CommandArgs args)
+        {
+            int i = 0;
+            int scatterleft = args.Player.TileX - 50;
+            int scatterright = args.Player.TileX + 50;
+            int scatterup = args.Player.TileY - 30;
+            int scatterdown = args.Player.TileY + 30;
+            foreach (TSPlayer tsplr in TShock.Players)
+            {
+                if (tsplr != null && tsplr.IsLoggedIn && tsplr.Name != args.Player.Name && !tsplr.Group.HasPermission("sc.antiscatter"))
+                {
+                    if (tsplr.TileX >= scatterleft && tsplr.TileX <= scatterright && tsplr.TileY >= scatterup && tsplr.TileY <= scatterdown)
+                    {
+                        i++;
+                        int teleport = Main.rand.Next(1000, 7000);
+                        tsplr.Disable();
+                        tsplr.Teleport(teleport, 50);
+                        tsplr.SendInfoMessage("You have been teleported to a random location in the air!");
+                    }
+                }
+            }
+            args.Player.SendInfoMessage(i.ToString() + " Players have been scattered across the map.");
+        }
 
         #region Ranks
         private void SCUser(CommandArgs args)
